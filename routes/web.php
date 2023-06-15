@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\InquiryController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,5 +30,10 @@ Route::get('/top', function () {
 Route::get('/access', function () {
     return view('guest.access');
 })->name('access');
+
+Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
+Route::post('/inquiry/confirm', [InquiryController::class, 'confirm'])->name('confirm');
+Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('store');
+Route::get('/thanks', [InquiryController::class, 'store']);
 
 require __DIR__.'/auth.php';
