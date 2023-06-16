@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\InquiryController;
 
+use App\Http\Controllers\AdminInquiryController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,5 +37,9 @@ Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
 Route::post('/inquiry/confirm', [InquiryController::class, 'confirm'])->name('confirm');
 Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('store');
 Route::get('/thanks', [InquiryController::class, 'store']);
+
+Route::get('/admin_inquiry', [AdminInquiryController::class, 'admin_inquiry'])->middleware(['auth'])->name('admin_inquiry');
+Route::post('/admin_inquiry_update/{id}', [AdminInquiryController::class, 'admin_inquiry_update'])->middleware(['auth'])->name('admin_inquiry_update');
+Route::get('/admin_inquiry_detail/{id}', [AdminInquiryController::class, 'admin_inquiry_detail'])->middleware(['auth'])->name('admin_inquiry_detail');
 
 require __DIR__.'/auth.php';
