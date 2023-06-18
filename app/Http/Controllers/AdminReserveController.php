@@ -8,8 +8,49 @@ use Carbon\Carbon;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
-class AdminReserveCreateController extends BaseController
+class AdminReserveController extends BaseController
 {
+
+    public function admin_reserve_index(){
+
+        $ReserveSpaces = ReserveSpace::with('room')
+                            ->select()
+                            ->whereNull('deleted_at')
+                            ->get();
+        // dd($ReserveSpaces);
+
+        return view('admin_reserve.index',compact('ReserveSpaces'));
+    }
+
+    public function admin_reserve_space_update(Request $request){
+
+        $ReserveSpace = ReserveSpace::where('id', '=', $request->id)->first();
+        // dd($Inquiry->type);
+
+        if($ReserveSpace->reserve_type === 0){
+            ReserveSpace::where('id', $request->id)->update(['reserve_type' => 1]);
+        } else {
+            ReserveSpace::where('id', $request->id)->update(['reserve_type' => 0]);
+        }
+
+        return redirect()->route('admin_reserve_index');
+    }
+
+    public function admin_reserve_space_destroy(Request $request){
+
+        $destroyReserveSpace = ReserveSpace::where('id', $request->id)->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
+
+        if($destroyReserveSpace){
+            $messageKey = 'successMessage';
+            $flashMessage = '削除が成功しました！';
+        } else {
+            $messageKey = 'errorMessage';
+            $flashMessage = '削除できませんでした。';
+        }
+
+        return redirect()->route('admin_reserve_index')->with($messageKey, $flashMessage);
+    }
+
     public function admin_reserve_create(){
 
         $Rooms = Room::get();
